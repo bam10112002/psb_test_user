@@ -32,15 +32,16 @@ const DisplayInitData = () => {
         console.log('Получен webApp.initDataUnsafe:', initDataUnsafe);
 
         // Преобразуем объект в красивую строку для отображения
-        if (initDataUnsafe) {
+        if (initDataUnsafe !== undefined && initDataUnsafe !== null) {
              // Используем JSON.stringify с отступами для читаемости
+             // В случае пустого объекта {} он так и отобразится
              const dataString = JSON.stringify(initDataUnsafe, null, 2);
              console.log('Данные преобразованы в строку.');
              setDisplayContent(dataString);
         } else {
-             console.log('webApp.initDataUnsafe пуст или undefined.');
+             console.log('webApp.initDataUnsafe пуст, undefined или null.');
              setIsError(true);
-             setDisplayContent("Ошибка: webApp.initDataUnsafe пуст или undefined.");
+             setDisplayContent("Ошибка: webApp.initDataUnsafe пуст, undefined или null.");
         }
 
 
@@ -68,11 +69,15 @@ const DisplayInitData = () => {
                 <p style={{ fontSize: '0.9em', color: '#666', marginTop: '20px', textAlign: 'center' }}>
                    <small>Это сырые данные, полученные от Telegram при запуске Web App.
                    <br/>
-                   Объект 'user' должен быть частью этих данных.</small>
+                   Объект 'user' должен быть частью этих данных для получения User ID.</small>
                </p>
            )}
-           {!isError && (displayContent === 'Загрузка данных Telegram...' || displayContent === '{}')}
-           {/* Если пусто, можно добавить пояснение, но лучше, если JSON.stringify покажет "{}" */}
+           {/* Если isError и displayContent - это текст ошибки, никаких доп. пояснений не нужно */}
+           {isError && typeof displayContent === 'string' && displayContent.startsWith('Ошибка:') && (
+               <p style={{ fontSize: '0.9em', color: 'red', marginTop: '20px', textAlign: 'center' }}>
+                   <small>Исправьте ошибку выше.</small>
+               </p>
+           )}
 
       </div>
   );

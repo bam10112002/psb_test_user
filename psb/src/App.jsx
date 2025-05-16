@@ -13,7 +13,7 @@ function App() {
       </header>
       <main>
         {/* Вставляем наш компонент */}
-        <DisplayInitData />
+        <DisplayInitData/>
       </main>
     </div>
   )
